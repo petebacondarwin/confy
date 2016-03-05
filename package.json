@@ -1,15 +1,15 @@
 {
   "name": "confy",
   "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "description": "A SPA for conference attendees",
+  "author": "Pete Bacon Darwin",
+  "license": "MIT",
+  "scripts": { "start": "lite-server" },
+  "dependencies": {
+    "@angular/router": "*",
+    "angular": "1.5.0"
   },
-  "author": "",
-  "license": "ISC",
   "devDependencies": {
-    "@angular/router": "0.0.1",
-    "angular": "^1.5.0"
+    "lite-server": "^2.0.1"
   }
 }
