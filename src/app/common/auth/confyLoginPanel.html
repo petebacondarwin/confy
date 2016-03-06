@@ -1,8 +1,8 @@
-<div ng-hide="$ctrl.auth.isLoggedIn()">
-  <button ng-click="$ctrl.auth.login('twitter')">Login via Twitter</button>
-  <button ng-click="$ctrl.auth.login('google')">Login via Google</button>
-  <button ng-click="$ctrl.auth.login('github')">Login via Github</button>
+<div ng-hide="$ctrl.isLoggedIn()">
+  <button ng-click="$ctrl.login('twitter')">Login via Twitter</button>
+  <button ng-click="$ctrl.login('google')">Login via Google</button>
+  <button ng-click="$ctrl.login('github')">Login via Github</button>
 </div>
-<div ng-show="$ctrl.auth.isLoggedIn()">
-  {{ $ctrl.auth.getDisplayName() }} <button ng-click="$ctrl.auth.logout()">Logout</button>
+<div ng-show="$ctrl.isLoggedIn()">
+  {{ $ctrl.getDisplayName() }} <button ng-click="$ctrl.logout()">Logout</button>
 </div>

@@ -23,7 +23,11 @@
     "angularfire": "^1.1.4",
     "firebase": "^2.4.1",
     "immutable": "^3.7.6",
-    "redux": "^3.3.1"
+    "ng-redux": "^3.3.3",
+    "ramda": "^0.19.1",
+    "redux": "^3.3.1",
+    "redux-logger": "^2.6.1",
+    "redux-thunk": "^2.0.1"
   },
   "devDependencies": {
     "angular-mocks": "^1.5.0",
