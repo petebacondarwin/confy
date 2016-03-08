@@ -4,5 +4,5 @@
   <button ng-click="$ctrl.login('github')">Login via Github</button>
 </div>
 <div ng-show="$ctrl.isLoggedIn()">
-  {{ $ctrl.getDisplayName() }} <button ng-click="$ctrl.logout()">Logout</button>
+  {{ $ctrl.getUserInfo().displayName }} <button ng-click="$ctrl.logout()">Logout</button>
 </div>

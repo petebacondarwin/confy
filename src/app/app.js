@@ -1,20 +1,28 @@
 import angular from 'angular'
-import common from './common'
-
-import {createStore, applyMiddleware} from 'redux'
 import thunk from 'redux-thunk'
 import createLogger from 'redux-logger'
-import {reducer, initAuth} from './states/auth'
+import storeModule from './common/store'
+import authModule from './auth'
 
-angular.module('app', [common])
+angular.module('app', [storeModule, authModule])
+
 .component('confyApp', {
   template: '<confy-login-panel></confy-login-panel>'
 })
 
-.factory('store', ($rootScope) => {
-  const logger = createLogger();
-  const store = createStore(reducer, applyMiddleware(thunk, logger));
-  store.dispatch(initAuth());
-  store.subscribe(() => $rootScope.$$phase || $rootScope.$apply());
-  return store;
+
+.config((storeProvider, authReducerProvider) => {
+
+  storeProvider
+    .reducers({
+      auth: authReducerProvider.reducer
+    })
+    .middleware([
+      thunk,
+      createLogger()
+    ]);
+})
+
+.run((store) => {
+  console.log(store.getState());
 });
