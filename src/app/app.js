@@ -1,40 +1,24 @@
 import angular from 'angular'
-import {combineReducers, createStore, applyMiddleware} from 'redux'
 
-// Middleware
-import thunk from 'redux-thunk'
-import createLogger from 'redux-logger'
+// Import our redux store
+import store from './store'
 
-// Reducers
-import {reducer as auth} from './auth/states'
-import {reducer as sessions} from './sessions/states'
-
-// Angular Modules
+// Import the angular module dependencies
 import authModule from './auth'
 import sessionsModule from './sessions'
 
+// Create the top level Angular app module
 angular.module('confyApp', [authModule, sessionsModule])
 
-.component('confyApp', {
-  template: '<confy-login-panel></confy-login-panel>'
-})
+  .constant('firebaseRootUrl', 'https://confy.firebaseio.com')
+  .value('store', store)
+  .component('confyApp', { template: require('./confyApp.template.html') })
 
-.constant('firebaseRootUrl', 'https://confy.firebaseio.com')
+  // Initialize the application
+  .run((authActions, sessionsActions) => {
+    authActions.init();
+    sessionsActions.subscribe();
+  });
 
-.value('store', createStore(
-  combineReducers({
-    auth,
-    sessions
-  }),
-  applyMiddleware(
-    thunk,
-    createLogger()
-  )
-))
-
-.run((authActions, sessionsActions) => {
-  authActions.init();
-  sessionsActions.subscribe();
-});
-
+// Bootstrap the app
 angular.bootstrap(document, ['confyApp']);

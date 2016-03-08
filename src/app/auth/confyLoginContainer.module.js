@@ -2,10 +2,10 @@ import angular from 'angular'
 import {authStateTypes} from './states'
 
 class ConfyLoginContainer {
-  constructor(authActions, store) {
+  constructor(store, authActions) {
 
-    this.authActions = authActions;
     this.auth = store.getState().auth;
+    this.authActions = authActions;
 
     store.subscribe(() => {
       let auth = store.getState().auth;
@@ -32,11 +32,11 @@ class ConfyLoginContainer {
   }
 }
 
-const confyLoginPanel = {
+const confyLoginContainer = {
   template: require('./confyLoginContainer.template.html'),
   controller: ConfyLoginContainer
 };
 
 export default angular.module('auth/confyLoginContainer', ['auth/actions'])
-  .component('confyLoginPanel', confyLoginPanel)
+  .component('confyLoginContainer', confyLoginContainer)
   .name;
