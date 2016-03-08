@@ -1,24 +1,35 @@
 import angular from 'angular'
+import {authStateTypes} from './states'
 
 class ConfyLoginPanel {
-  constructor(authService, authStatusTypes) {
-    this.authService = authService;
+  constructor(authActions, store) {
+
+    this.authActions = authActions;
+
+    this.auth = store.getState().auth;
+
+    store.subscribe(() => {
+      let auth = store.getState().auth;
+      if (this.auth !== auth) {
+        this.auth = auth;
+      }
+    })
   }
 
   login(provider) {
-    this.authService.login(provider);
+    this.authActions.login(provider);
   }
 
   logout() {
-    this.authService.logout();
+    this.authActions.logout();
   }
 
   isLoggedIn() {
-    return this.authService.isLoggedIn();
+    return !!this.auth.userInfo;
   }
 
   getUserInfo() {
-    return this.authService.getUserInfo();
+    return this.auth.userInfo ? this.auth.userInfo.displayName : '';
   }
 }
 
@@ -27,6 +38,6 @@ const confyLoginPanel = {
   controller: ConfyLoginPanel
 };
 
-export default angular.module('confyLoginPanel', [])
+export default angular.module('auth/confyLoginPanel', ['auth/actions'])
   .component('confyLoginPanel', confyLoginPanel)
   .name;
