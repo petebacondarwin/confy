@@ -1,11 +1,10 @@
 import angular from 'angular'
 import {authStateTypes} from './states'
 
-class ConfyLoginPanel {
+class ConfyLoginContainer {
   constructor(authActions, store) {
 
     this.authActions = authActions;
-
     this.auth = store.getState().auth;
 
     store.subscribe(() => {
@@ -13,7 +12,7 @@ class ConfyLoginPanel {
       if (this.auth !== auth) {
         this.auth = auth;
       }
-    })
+    });
   }
 
   login(provider) {
@@ -34,10 +33,10 @@ class ConfyLoginPanel {
 }
 
 const confyLoginPanel = {
-  template: require('./confyLoginPanel.html'),
-  controller: ConfyLoginPanel
+  template: require('./confyLoginContainer.template.html'),
+  controller: ConfyLoginContainer
 };
 
-export default angular.module('auth/confyLoginPanel', ['auth/actions'])
+export default angular.module('auth/confyLoginContainer', ['auth/actions'])
   .component('confyLoginPanel', confyLoginPanel)
   .name;

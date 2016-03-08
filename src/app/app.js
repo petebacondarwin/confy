@@ -7,11 +7,13 @@ import createLogger from 'redux-logger'
 
 // Reducers
 import {reducer as auth} from './auth/states'
+import {reducer as sessions} from './sessions/states'
 
 // Angular Modules
-import authModule from './auth';
+import authModule from './auth'
+import sessionsModule from './sessions'
 
-angular.module('confyApp', [authModule])
+angular.module('confyApp', [authModule, sessionsModule])
 
 .component('confyApp', {
   template: '<confy-login-panel></confy-login-panel>'
@@ -21,7 +23,8 @@ angular.module('confyApp', [authModule])
 
 .value('store', createStore(
   combineReducers({
-    auth
+    auth,
+    sessions
   }),
   applyMiddleware(
     thunk,
@@ -29,8 +32,9 @@ angular.module('confyApp', [authModule])
   )
 ))
 
-.run((authActions) => {
+.run((authActions, sessionsActions) => {
   authActions.init();
+  sessionsActions.subscribe();
 });
 
 angular.bootstrap(document, ['confyApp']);
