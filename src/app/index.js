@@ -1,6 +1,4 @@
 import angular from 'angular'
-
-// Import our redux store
 import createStateServices from '@@root/lib/createStateServices'
 
 // Middleware
@@ -11,18 +9,25 @@ import createLogger from 'redux-logger'
 import auth from './auth'
 import sessions from './sessions'
 
+// Create the object containing redux state stuff
+let states = {
+  auth: auth.state,
+  sessions: sessions.state
+};
+
+// Create an array of middleware to pass to redux
+let middleware = [
+  thunk,
+  createLogger()
+];
+
 // Import other angular module dependencies
 import confyAppModule from './modules/confyApp.module'
 
 // Create the top level Angular app module
 angular.module('app', [confyAppModule, auth.module, sessions.module])
-
   .constant('firebaseRootUrl', 'https://confy.firebaseio.com')
-
-  .config(($provide)=> createStateServices($provide, {
-    auth: auth.state,
-    sessions: sessions.state
-  }, [thunk, createLogger()]));
+  .config(($provide)=> createStateServices($provide, states, middleware));
 
 // Bootstrap the app
 angular.bootstrap(document, ['app']);
