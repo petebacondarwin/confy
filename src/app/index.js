@@ -1,7 +1,11 @@
 import angular from 'angular'
 
 // Import our redux store
-import {createStateServices} from './store'
+import createStateServices from '@@root/lib/createStateServices'
+
+// Middleware
+import thunk from 'redux-thunk'
+import createLogger from 'redux-logger'
 
 // Import feature areas
 import auth from './auth'
@@ -18,7 +22,7 @@ angular.module('app', [confyAppModule, auth.module, sessions.module])
   .config(($provide)=> createStateServices($provide, {
     auth: auth.state,
     sessions: sessions.state
-  }));
+  }, [thunk, createLogger()]));
 
 // Bootstrap the app
 angular.bootstrap(document, ['app']);

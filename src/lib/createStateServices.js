@@ -1,12 +1,7 @@
 import {combineReducers, createStore, applyMiddleware} from 'redux'
 
-// Middleware
-import thunk from 'redux-thunk'
-import createLogger from 'redux-logger'
 
-
-
-export function createStateServices($provide, states) {
+export default function createStateServices($provide, states, middleware) {
 
   var key;
   var reducers = {};
@@ -26,10 +21,7 @@ export function createStateServices($provide, states) {
   // Provide the redux store
   $provide.value('store', createStore(
     combineReducers(reducers),
-    applyMiddleware(
-      thunk,
-      createLogger()
-    )
+    applyMiddleware.apply(applyMiddleware, middleware)
   ));
 
   // Provider a "selectors" service for each state
@@ -37,6 +29,7 @@ export function createStateServices($provide, states) {
     defineSelectorService(key);
   }
 
+  // Need to define this as a function to create a closure around the key parameter
   function defineSelectorService(key) {
     $provide.factory(key + 'Selectors', (store) => new Selectors[key](key, store))
   }
