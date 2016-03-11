@@ -1,6 +1,6 @@
 import angular from 'angular'
 import Firebase from 'firebase'
-import {authActionTypes} from './states'
+import {authActionTypes} from '../states'
 
 export default angular.module('auth/actions', []).factory('authActions', authActionsFactory).name;
 

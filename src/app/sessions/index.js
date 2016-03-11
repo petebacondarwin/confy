@@ -1,5 +1,7 @@
-import angular from 'angular'
-import actions from './actions.module'
-import sessionList from './sessionList.module'
+import module from './modules'
+import {reducer, Selectors} from './states'
 
-export default angular.module('sessions', [actions, sessionList]).name;
+export default {
+  module: module,
+  state: {reducer, Selectors}
+};

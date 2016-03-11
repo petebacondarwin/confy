@@ -1,6 +1,6 @@
 {
   "firebase": "confy",
-  "public": ".",
+  "public": "dist",
   "ignore": [
     "firebase.json",
     "**/.*",

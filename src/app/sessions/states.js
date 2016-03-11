@@ -1,3 +1,5 @@
+import {SelectorsBase} from '@@root/lib/SelectorsBase'
+
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
   UNSUBSCRIBE: 'sessions/UNSUBSCRIBE',
@@ -28,9 +30,24 @@ export function reducer(state = UNSUBSCRIBED_STATE, action) {
     case sessionsActionTypes.UPDATE:
       return {
         status: sessionsStatusTypes.SUBSCRIBED,
-        items: action.sessions
+        items: action.sessions,
+        subscription: action.subscription
       };
     default:
       return state;
+  }
+}
+
+export class Selectors extends SelectorsBase {
+  constructor(reducerKey, store) {
+    super(reducerKey, store);
+  }
+
+  getSubscription() {
+    return this.getState().subscription;
+  }
+
+  getSessionItems() {
+    return this.getState().items;
   }
 }

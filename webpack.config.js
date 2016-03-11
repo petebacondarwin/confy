@@ -30,7 +30,14 @@ module.exports = function makeWebpackConfig () {
    * Karma will set this when it's a test build
    */
   config.entry = isTest ? {} : {
-    app: './src/app/app.js'
+    app: './src/app'
+  };
+
+
+  config.resolve = {
+    alias: {
+      '@@root' : __dirname + '/src'
+    }
   };
 
   /**

@@ -1,5 +1,7 @@
-import angular from 'angular'
-import actions from './actions.module'
-import confyLoginContainer from './confyLoginContainer.module'
+import module from './modules'
+import {reducer, Selectors} from './states'
 
-export default angular.module('auth', [actions, confyLoginContainer]).name;
+export default {
+  module: module,
+  state: {reducer, Selectors}
+};

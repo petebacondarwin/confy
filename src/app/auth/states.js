@@ -1,3 +1,5 @@
+import {SelectorsBase} from '@@root/lib/SelectorsBase'
+
 export const authActionTypes = {
   LOGGING_IN: 'auth/LOGGING_IN',
   LOGGED_IN: 'auth/LOGGED_IN',
@@ -40,3 +42,19 @@ export function reducer(state = LOGGED_OUT_STATE, action) {
       return state;
   }
 }
+
+export class Selectors extends SelectorsBase {
+
+  constructor(reducerKey, store) {
+    super(reducerKey, store);
+  }
+
+  getUserInfo() {
+    return this.getState().userInfo;
+  }
+
+  isLoggedIn() {
+    return !!this.getUserInfo();
+  }
+}
+
