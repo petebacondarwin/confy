@@ -36,7 +36,9 @@ module.exports = function makeWebpackConfig () {
 
   config.resolve = {
     alias: {
-      '@@root' : __dirname + '/src'
+      // Create an alias to the project so that we can avoid massive amount
+      // ugly relative paths
+      'confy' : __dirname + '/src'
     }
   };
 

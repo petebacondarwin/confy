@@ -1,5 +1,5 @@
 import angular from 'angular'
-import createStateServices from '@@root/lib/createStateServices'
+import createStateServices from 'confy/lib/createStateServices'
 
 // Middleware
 import thunk from 'redux-thunk'

@@ -1,4 +1,4 @@
-import {SelectorsBase} from '@@root/lib/SelectorsBase'
+import {SelectorsBase} from 'confy/lib/SelectorsBase'
 
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
