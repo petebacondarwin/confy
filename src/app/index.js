@@ -1,3 +1,4 @@
+import "babel-polyfill"
 import angular from 'angular'
 import createStateServices from 'confy/lib/createStateServices'
 
