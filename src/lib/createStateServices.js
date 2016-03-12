@@ -21,7 +21,7 @@ export default function createStateServices($provide, states, middleware) {
   // Provide the redux store
   $provide.value('store', createStore(
     combineReducers(reducers),
-    applyMiddleware.apply(applyMiddleware, middleware)
+    applyMiddleware(...middleware)
   ));
 
   // Provider a "selectors" service for each state
