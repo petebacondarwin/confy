@@ -7,10 +7,6 @@ class ConfyLoginContainer {
     this.authSelectors = authSelectors;
   }
 
-  $onInit() {
-    this.authActions.init();
-  }
-
   login(provider) {
     this.authActions.login(provider);
   }

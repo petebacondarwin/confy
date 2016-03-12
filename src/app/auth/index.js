@@ -1,7 +1,9 @@
 import module from './modules'
-import {reducer, Selectors} from './states'
+import {reducer} from './states'
+import {Selectors} from './Selectors'
+import {sagas} from './sagas'
 
 export default {
   module: module,
-  state: {reducer, Selectors}
+  state: {reducer, Selectors, sagas}
 };

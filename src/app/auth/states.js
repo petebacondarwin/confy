@@ -1,9 +1,8 @@
-import {SelectorsBase} from 'confy/lib/SelectorsBase'
 
 export const authActionTypes = {
-  LOGGING_IN: 'auth/LOGGING_IN',
-  LOGGED_IN: 'auth/LOGGED_IN',
-  LOGGED_OUT: 'auth/LOGGED_OUT',
+  LOG_IN: 'auth/LOG_IN',
+  LOG_IN_SUCCESS: 'auth/LOG_IN_SUCCESS',
+  LOG_OUT: 'auth/LOG_OUT',
   LOGIN_FAILED: 'auth/LOGIN_FAILED'
 };
 
@@ -27,34 +26,19 @@ const LOGGED_OUT_STATE = {
 
 export function reducer(state = LOGGED_OUT_STATE, action) {
   switch(action.type) {
-    case authActionTypes.LOGGING_IN:
+    case authActionTypes.LOG_IN:
       return LOGGING_IN_STATE;
-    case authActionTypes.LOGGED_IN:
+    case authActionTypes.LOG_IN_SUCCESS:
       return {
         status: authStatusTypes.LOGGED_IN,
         userInfo: action.userInfo,
         uid: action.uid
       };
-    case authActionTypes.LOGGED_OUT:
+    case authActionTypes.LOG_OUT:
     case authActionTypes.LOGIN_FAILED:
       return LOGGED_OUT_STATE;
     default:
       return state;
-  }
-}
-
-export class Selectors extends SelectorsBase {
-
-  constructor(reducerKey, store) {
-    super(reducerKey, store);
-  }
-
-  getUserInfo() {
-    return this.getState().userInfo;
-  }
-
-  isLoggedIn() {
-    return !!this.getUserInfo();
   }
 }
 
