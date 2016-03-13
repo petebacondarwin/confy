@@ -1,6 +1,6 @@
-import {SelectorsBase} from 'confy/lib/SelectorsBase';
+import {ScopedSelectors} from 'confy/lib/ScopedSelectors';
 
-export class Selectors extends SelectorsBase {
+export class AuthSelectors extends ScopedSelectors {
 
   constructor(reducerKey, store) {
     super(reducerKey, store);

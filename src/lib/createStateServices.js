@@ -26,16 +26,21 @@ export default function createStateServices($provide, states, middleware) {
 
 
   // Provide the redux store
-  $provide.factory('store', ($injector) => {
+  $provide.factory('store', ($injector, $rootScope) => {
 
     // Create the sagas from their injectable factories
     var sagas = sagaFactories.map((sagaFactory)=>$injector.invoke(sagaFactory));
     middleware = [createSagaMiddleware(...sagas), ...middleware];
 
-    return createStore(
+    const store = createStore(
       combineReducers(reducers),
       applyMiddleware(...middleware)
     );
+
+    // Trigger a digest (if necessary) after each change to the store
+    store.subscribe(() => $rootScope.$evalAsync());
+
+    return store;
   });
 
   // Provider a "selectors" service for each state

@@ -1,6 +1,7 @@
 import 'babel-polyfill';
 import angular from 'angular';
 import createStateServices from 'confy/lib/createStateServices';
+import {firebaseServiceFactory} from 'confy/lib/firebase';
 
 // Middleware
 import thunk from 'redux-thunk';
@@ -28,6 +29,7 @@ let middleware = [
 // Create the top level Angular app module
 angular.module('app', [confyAppModule, auth.module, sessions.module])
   .constant('firebaseRootUrl', 'https://confy.firebaseio.com')
+  .factory('firebaseService', firebaseServiceFactory)
   .config(($provide)=> createStateServices($provide, states, middleware));
 
 // Bootstrap the app

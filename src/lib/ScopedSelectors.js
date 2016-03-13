@@ -1,4 +1,4 @@
-export class SelectorsBase {
+export class ScopedSelectors {
 
   constructor(reducerKey, store) {
     this.reducerKey = reducerKey;

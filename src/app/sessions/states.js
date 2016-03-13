@@ -1,5 +1,3 @@
-import {SelectorsBase} from 'confy/lib/SelectorsBase';
-
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
   UNSUBSCRIBE: 'sessions/UNSUBSCRIBE',
@@ -35,19 +33,5 @@ export function reducer(state = UNSUBSCRIBED_STATE, action) {
       };
     default:
       return state;
-  }
-}
-
-export class Selectors extends SelectorsBase {
-  constructor(reducerKey, store) {
-    super(reducerKey, store);
-  }
-
-  getSubscription() {
-    return this.getState().subscription;
-  }
-
-  getSessionItems() {
-    return this.getState().items;
   }
 }
