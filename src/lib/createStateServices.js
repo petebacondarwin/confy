@@ -6,7 +6,7 @@ export default function createStateServices($provide, states, middleware) {
 
   var key;
   var reducers = {};
-  var Selectors = {};
+  var selectorsFactory = {};
   var sagaFactories = [];
 
   // Map the `states` to `reducers` and `selectors` objects
@@ -15,8 +15,8 @@ export default function createStateServices($provide, states, middleware) {
     if (state.reducer) {
       reducers[key] = state.reducer;
     }
-    if (state.Selectors) {
-      Selectors[key] = state.Selectors;
+    if (state.selectorsFactory) {
+      selectorsFactory[key] = state.selectorsFactory;
     }
     if (state.sagaFactories) {
       sagaFactories.push(...state.sagaFactories);
@@ -44,12 +44,16 @@ export default function createStateServices($provide, states, middleware) {
   });
 
   // Provider a "selectors" service for each state
-  for(key in Selectors) {
-    defineSelectorService(key);
+  for(key in selectorsFactory) {
+    registerSelectors(key);
   }
 
   // Need to define this as a function to create a closure around the key parameter
-  function defineSelectorService(key) {
-    $provide.factory(key + 'Selectors', (store) => new Selectors[key](key, store));
+  function registerSelectors(key) {
+    $provide.factory(key + 'Selectors', (store) => {
+      // Create a specialised form of the getState method that is scoped to the state
+      let getState = () => store.getState()[key];
+      return selectorsFactory[key](getState);
+    });
   }
 }
