@@ -1,8 +1,8 @@
-import {combineReducers, createStore, applyMiddleware} from 'redux'
-import createSagaMiddleware from 'redux-saga'
+import {combineReducers, createStore, applyMiddleware} from 'redux';
+import createSagaMiddleware from 'redux-saga';
 
 
-export default function createStateServices($provide, states, middleware, sagaFactories) {
+export default function createStateServices($provide, states, middleware) {
 
   var key;
   var reducers = {};
@@ -18,8 +18,8 @@ export default function createStateServices($provide, states, middleware, sagaFa
     if (state.Selectors) {
       Selectors[key] = state.Selectors;
     }
-    if (state.sagas) {
-      sagaFactories.push(...state.sagas);
+    if (state.sagaFactories) {
+      sagaFactories.push(...state.sagaFactories);
     }
   }
 
@@ -35,7 +35,7 @@ export default function createStateServices($provide, states, middleware, sagaFa
     return createStore(
       combineReducers(reducers),
       applyMiddleware(...middleware)
-    )
+    );
   });
 
   // Provider a "selectors" service for each state
@@ -45,6 +45,6 @@ export default function createStateServices($provide, states, middleware, sagaFa
 
   // Need to define this as a function to create a closure around the key parameter
   function defineSelectorService(key) {
-    $provide.factory(key + 'Selectors', (store) => new Selectors[key](key, store))
+    $provide.factory(key + 'Selectors', (store) => new Selectors[key](key, store));
   }
 }

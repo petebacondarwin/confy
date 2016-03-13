@@ -1,14 +1,17 @@
-import "babel-polyfill"
-import angular from 'angular'
-import createStateServices from 'confy/lib/createStateServices'
+import 'babel-polyfill';
+import angular from 'angular';
+import createStateServices from 'confy/lib/createStateServices';
 
 // Middleware
-import thunk from 'redux-thunk'
-import createLogger from 'redux-logger'
+import thunk from 'redux-thunk';
+import createLogger from 'redux-logger';
 
 // Import feature areas
-import auth from './auth'
-import sessions from './sessions'
+import auth from './auth';
+import sessions from './sessions';
+
+// Import other angular module dependencies
+import confyAppModule from './modules/confyApp.module';
 
 // Create the object containing redux state stuff
 let states = {
@@ -21,9 +24,6 @@ let middleware = [
   thunk,
   createLogger()
 ];
-
-// Import other angular module dependencies
-import confyAppModule from './modules/confyApp.module'
 
 // Create the top level Angular app module
 angular.module('app', [confyAppModule, auth.module, sessions.module])

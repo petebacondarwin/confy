@@ -1,4 +1,4 @@
-import {SelectorsBase} from 'confy/lib/SelectorsBase'
+import {SelectorsBase} from 'confy/lib/SelectorsBase';
 
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
@@ -24,7 +24,7 @@ const SUBSCRIBED_STATE = {
 export function reducer(state = UNSUBSCRIBED_STATE, action) {
   switch(action.type) {
     case sessionsActionTypes.SUBSCRIBE:
-      return SUBSCRIBED_STATE
+      return SUBSCRIBED_STATE;
     case sessionsActionTypes.UNSUBSCRIBE:
       return UNSUBSCRIBED_STATE;
     case sessionsActionTypes.UPDATE:

@@ -30,7 +30,7 @@ function sessionsActionsFactory($rootScope, store, sessionsSelectors, firebaseRo
 
     // Unsubscribe from the session data
     unsubscribe: () => store.dispatch((dispatch) => {
-      let subsciption = !sessionsSelectors.getSubsciption();
+      let subscription = !sessionsSelectors.getSubsciption();
       if (subscription) {
         firebaseRef.off(subscription);
         dispatch({ type: sessionsActionTypes.UNSUBSCRIBE });
