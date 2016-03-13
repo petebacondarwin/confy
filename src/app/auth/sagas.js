@@ -1,6 +1,6 @@
 import {isCancelError} from 'redux-saga';
 import {take, call, put, race} from 'redux-saga/effects';
-import {authActionTypes} from './states';
+import {authActionTypes, loginFailedAction, loginSuccessAction} from './states';
 
 // Since we need the `firebaseRootUrl` service to create a firebase reference
 // with which to do the authentication, we must ask for it to be injected
@@ -16,13 +16,13 @@ export function authSagaFactory(firebaseService) {
     try {
       // Run the authentication request
       const authData = yield call(firebaseService.login, provider);
-      yield put(createLoginAction(authData));
+      yield put(loginSuccessAction(authData));
     } catch(error) {
       // There are two reasons for an exception:
       // - the authentication failed
       // - the loginSaga was cancelled (perhaps by a LOGOUT action)
       if (!isCancelError(error)) {
-        yield put({type: authActionTypes.LOGIN_FAILED, error});
+        yield put(loginFailedAction(error));
       }
     }
   }
@@ -44,7 +44,7 @@ export function authSagaFactory(firebaseService) {
     // Are we already logged in?
     const authData = yield call(firebaseService.getAuth);
     if (authData) {
-      yield put(createLoginAction(authData));
+      yield put(loginSuccessAction(authData));
     }
 
     // Race the login and logout sagas against each other
@@ -56,14 +56,4 @@ export function authSagaFactory(firebaseService) {
       });
     }
   };
-
-
-  // A simple helper function to DRY up creating the LOGIN_SUCCESS action
-  function createLoginAction(authData) {
-    return {
-      type: authActionTypes.LOGIN_SUCCESS,
-      userInfo: authData[authData.provider],
-      uid: authData.uid
-    };
-  }
 }

@@ -1,4 +1,4 @@
-
+// ACTION TYPES
 export const authActionTypes = {
   LOGIN: 'auth/LOGIN',
   LOGIN_SUCCESS: 'auth/LOGIN_SUCCESS',
@@ -6,12 +6,14 @@ export const authActionTypes = {
   LOGIN_FAILED: 'auth/LOGIN_FAILED'
 };
 
+// STATUS TYPES
 export const authStatusTypes = {
   LOGGING_IN: 'auth/LOGGING_IN',
   LOGGED_IN: 'auth/LOGGED_IN',
   LOGGED_OUT: 'auth/LOGGED_OUT'
 };
 
+// COMMON STATES
 const LOGGING_IN_STATE = {
   status: authStatusTypes.LOGGING_IN,
   userInfo: undefined,
@@ -24,6 +26,7 @@ const LOGGED_OUT_STATE = {
   uid: null
 };
 
+// REDUCERS
 export function reducer(state = LOGGED_OUT_STATE, action) {
   switch(action.type) {
     case authActionTypes.LOGIN:
@@ -42,3 +45,23 @@ export function reducer(state = LOGGED_OUT_STATE, action) {
   }
 }
 
+// ACTION CREATORS
+export function loginAction(provider) {
+  return { type: authActionTypes.LOGIN, provider };
+}
+
+export function logoutAction() {
+  return { type: authActionTypes.LOGOUT };
+}
+
+export function loginSuccessAction(authData) {
+  return {
+    type: authActionTypes.LOGIN_SUCCESS,
+    userInfo: authData[authData.provider],
+    uid: authData.uid
+  };
+}
+
+export function loginFailedAction(error) {
+  return {type: authActionTypes.LOGIN_FAILED, error};
+}

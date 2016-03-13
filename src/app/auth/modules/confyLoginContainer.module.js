@@ -1,17 +1,18 @@
 import angular from 'angular';
+import {loginAction, logoutAction} from '../states';
 
 class ConfyLoginContainer {
-  constructor(authActions, authSelectors) {
-    this.authActions = authActions;
+  constructor(store, authSelectors) {
+    this.dispatch = store.dispatch;
     this.authSelectors = authSelectors;
   }
 
   login(provider) {
-    this.authActions.login(provider);
+    this.dispatch(loginAction(provider));
   }
 
   logout() {
-    this.authActions.logout();
+    this.dispatch(logoutAction());
   }
 
   isLoggedIn() {
@@ -24,7 +25,7 @@ class ConfyLoginContainer {
 }
 
 
-export default angular.module('auth/confyLoginContainer', ['auth/actions'])
+export default angular.module('auth/confyLoginContainer', [])
   .component('confyLoginContainer', {
     template: require('./confyLoginContainer.template.html'),
     controller: ConfyLoginContainer
