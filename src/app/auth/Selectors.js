@@ -1,4 +1,4 @@
-import {SelectorsBase} from 'confy/lib/SelectorsBase'
+import {SelectorsBase} from 'confy/lib/SelectorsBase';
 
 export class Selectors extends SelectorsBase {
 

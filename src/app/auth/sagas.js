@@ -1,6 +1,6 @@
-import {take, call, put, cps, fork, cancel} from 'redux-saga/effects'
-import Firebase from 'firebase'
-import {authActionTypes} from './states'
+import {take, call, put, cps, fork, cancel} from 'redux-saga/effects';
+import Firebase from 'firebase';
+import {authActionTypes} from './states';
 
 export function authFlowFactory(firebaseRootUrl) {
   const firebaseRef = new Firebase(firebaseRootUrl);
@@ -54,5 +54,5 @@ export function authFlowFactory(firebaseRootUrl) {
       // Unauthenticate against firebase
       yield logout();
     }
-  }
+  };
 }

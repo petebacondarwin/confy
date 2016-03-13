@@ -1,6 +1,6 @@
-import angular from 'angular'
-import Firebase from 'firebase'
-import {sessionsActionTypes} from '../states'
+import angular from 'angular';
+import Firebase from 'firebase';
+import {sessionsActionTypes} from '../states';
 
 export default angular.module('sessions/actions', []).factory('sessionsActions', sessionsActionsFactory).name;
 
@@ -15,7 +15,7 @@ function sessionsActionsFactory($rootScope, store, sessionsSelectors, firebaseRo
     subscribe: () => store.dispatch((dispatch) => {
       if (!sessionsSelectors.getSubscription()) {
         dispatch({ type: sessionsActionTypes.SUBSCRIBE });
-        let subscription = firebaseRef.on("value", (snapshot) => {
+        let subscription = firebaseRef.on('value', (snapshot) => {
           // Firebase callbacks come from outside Angular
           $rootScope.$apply(() => {
             dispatch({
@@ -36,5 +36,5 @@ function sessionsActionsFactory($rootScope, store, sessionsSelectors, firebaseRo
         dispatch({ type: sessionsActionTypes.UNSUBSCRIBE });
       }
     })
-  }
+  };
 }

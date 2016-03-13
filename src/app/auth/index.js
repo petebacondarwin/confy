@@ -1,7 +1,7 @@
-import module from './modules'
-import {reducer} from './states'
-import {Selectors} from './Selectors'
-import {authFlowFactory} from './sagas'
+import module from './modules';
+import {reducer} from './states';
+import {Selectors} from './Selectors';
+import {authFlowFactory} from './sagas';
 
 export default {
   module: module,

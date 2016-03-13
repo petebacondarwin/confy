@@ -26,19 +26,19 @@ const LOGGED_OUT_STATE = {
 
 export function reducer(state = LOGGED_OUT_STATE, action) {
   switch(action.type) {
-  case authActionTypes.LOG_IN:
-    return LOGGING_IN_STATE;
-  case authActionTypes.LOG_IN_SUCCESS:
-    return {
-      status: authStatusTypes.LOGGED_IN,
-      userInfo: action.userInfo,
-      uid: action.uid
-    };
-  case authActionTypes.LOG_OUT:
-  case authActionTypes.LOGIN_FAILED:
-    return LOGGED_OUT_STATE;
-  default:
-    return state;
+    case authActionTypes.LOG_IN:
+      return LOGGING_IN_STATE;
+    case authActionTypes.LOG_IN_SUCCESS:
+      return {
+        status: authStatusTypes.LOGGED_IN,
+        userInfo: action.userInfo,
+        uid: action.uid
+      };
+    case authActionTypes.LOG_OUT:
+    case authActionTypes.LOGIN_FAILED:
+      return LOGGED_OUT_STATE;
+    default:
+      return state;
   }
 }
 

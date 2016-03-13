@@ -1,5 +1,4 @@
-import angular from 'angular'
-import {authStateTypes} from '../states'
+import angular from 'angular';
 
 class ConfyLoginContainer {
   constructor(authActions, authSelectors) {

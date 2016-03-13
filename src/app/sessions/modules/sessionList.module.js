@@ -1,4 +1,4 @@
-import angular from 'angular'
+import angular from 'angular';
 
 class SessionListContainer {
   constructor(sessionsSelectors, sessionsActions, $scope) {

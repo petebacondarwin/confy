@@ -1,5 +1,5 @@
-import module from './modules'
-import {reducer, Selectors} from './states'
+import module from './modules';
+import {reducer, Selectors} from './states';
 
 export default {
   module: module,
