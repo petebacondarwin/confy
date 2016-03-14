@@ -1,5 +1,5 @@
 import {take, call, put, race} from 'redux-saga/effects';
-import {sessionsActionTypes} from './states';
+import {sessionsActionTypes, updateAction} from './states';
 
 export function sessionsSagaFactory(firebaseService) {
 
@@ -11,10 +11,7 @@ export function sessionsSagaFactory(firebaseService) {
       // Wait for an update to arrive on the channel
       const snapshot = yield call(channel.take);
       // Dispatch the new value to the store
-      yield put({
-        type: sessionsActionTypes.UPDATE,
-        sessions: snapshot.val()
-      });
+      yield put(updateAction(snapshot));
     }
   }
 

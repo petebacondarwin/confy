@@ -1,15 +1,16 @@
 import angular from 'angular';
+import {subscribeAction, unsubscribeAction} from '../states';
 
 class SessionListContainer {
-  constructor(sessionsSelectors, sessionsActions, $scope) {
+  constructor(sessionsSelectors, $scope, store) {
     this.sessionsSelectors = sessionsSelectors;
-    this.sessionsActions = sessionsActions;
     this.$scope = $scope;
+    this.store = store;
   }
 
   $onInit() {
-    this.sessionsActions.subscribe();
-    this.$scope.$on('$destroy', this.sessionsActions.unsubscribe);
+    this.store.dispatch(subscribeAction());
+    this.$scope.$on('$destroy', this.store.dispatch(unsubscribeAction));
   }
 
   getSessions() {
@@ -17,11 +18,9 @@ class SessionListContainer {
   }
 }
 
-const sessionListContainer = {
-  template: require('./sessionList.template.html'),
-  controller: SessionListContainer
-};
-
-export default angular.module('sessions/sessionsListContainer', ['sessions/actions'])
-  .component('sessionListContainer', sessionListContainer)
+export default angular.module('sessions/sessionsListContainer', [])
+  .component('sessionListContainer', {
+    template: require('./sessionList.template.html'),
+    controller: SessionListContainer
+  })
   .name;

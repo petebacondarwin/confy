@@ -1,14 +1,18 @@
+// ACTION TYPES
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
   UNSUBSCRIBE: 'sessions/UNSUBSCRIBE',
   UPDATE: 'sessions/UPDATE'
 };
 
+// STATUS TYPES
 export const sessionsStatusTypes = {
   SUBSCRIBED: 'sessions/SUBSCRIBED',
   UNSUBSCRIBED: 'sessions/UNSUBSCRIBED'
 };
 
+
+// COMMON STATES
 const UNSUBSCRIBED_STATE = {
   status: sessionsStatusTypes.UNSUBSCRIBED,
   items: []
@@ -19,6 +23,7 @@ const SUBSCRIBED_STATE = {
   items: []
 };
 
+// REDUCERS
 export function reducer(state = UNSUBSCRIBED_STATE, action) {
   switch(action.type) {
     case sessionsActionTypes.SUBSCRIBE:
@@ -34,4 +39,20 @@ export function reducer(state = UNSUBSCRIBED_STATE, action) {
     default:
       return state;
   }
+}
+
+// ACTION CREATORS
+export function subscribeAction() {
+  return { type: sessionsActionTypes.SUBSCRIBE };
+}
+
+export function unsubscribeAction() {
+  return { type: sessionsActionTypes.UNSUBSCRIBE };
+}
+
+export function updateAction(snapshot) {
+  return {
+    type: sessionsActionTypes.UPDATE,
+    sessions: snapshot.val()
+  };
 }
