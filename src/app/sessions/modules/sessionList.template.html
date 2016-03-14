@@ -1,1 +1,1 @@
-<div ng-repeat="session in $ctrl.getSessions()" session="session">{{ session.name }}</div>
+<session-editor ng-repeat="session in $ctrl.getSessions()" session="session" on-save="$ctrl.save(session)"></session-editor>

@@ -1,20 +1,25 @@
 import angular from 'angular';
-import {subscribeAction, unsubscribeAction} from '../states';
+import {subscribeAction, unsubscribeAction, saveAction} from '../states';
 
 class SessionListContainer {
   constructor(sessionsSelectors, $scope, store) {
     this.sessionsSelectors = sessionsSelectors;
     this.$scope = $scope;
-    this.store = store;
+    this.dispatch = store.dispatch;
   }
 
   $onInit() {
-    this.store.dispatch(subscribeAction());
-    this.$scope.$on('$destroy', this.store.dispatch(unsubscribeAction));
+    this.dispatch(subscribeAction());
+    this.$scope.$on('$destroy', () => this.dispatch(unsubscribeAction));
   }
 
   getSessions() {
     return this.sessionsSelectors.getSessionItems();
+  }
+
+  save(session) {
+    console.log('save', session);
+    this.dispatch(saveAction(session));
   }
 }
 

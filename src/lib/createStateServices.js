@@ -1,6 +1,9 @@
 import {combineReducers, createStore, applyMiddleware} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 
+const flatten = list => list.reduce(
+    (a, b) => a.concat(Array.isArray(b) ? flatten(b) : b), []
+);
 
 export default function createStateServices($provide, states, middleware) {
 
@@ -29,8 +32,8 @@ export default function createStateServices($provide, states, middleware) {
   $provide.factory('store', ($injector, $rootScope) => {
 
     // Create the sagas from their injectable factories
-    var sagas = sagaFactories.map((sagaFactory)=>$injector.invoke(sagaFactory));
-    middleware = [createSagaMiddleware(...sagas), ...middleware];
+    var sagas = sagaFactories.map((sagaFactory)=> $injector.invoke(sagaFactory));
+    middleware = [createSagaMiddleware(...flatten(sagas)), ...middleware];
 
     const store = createStore(
       combineReducers(reducers),

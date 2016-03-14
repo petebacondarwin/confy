@@ -2,7 +2,8 @@
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
   UNSUBSCRIBE: 'sessions/UNSUBSCRIBE',
-  UPDATE: 'sessions/UPDATE'
+  UPDATE: 'sessions/UPDATE',
+  SAVE: 'sessions/SAVE'
 };
 
 // STATUS TYPES
@@ -54,5 +55,12 @@ export function updateAction(snapshot) {
   return {
     type: sessionsActionTypes.UPDATE,
     sessions: snapshot.val()
+  };
+}
+
+export function saveAction(session) {
+  return {
+    type: sessionsActionTypes.SAVE,
+    session: session
   };
 }
