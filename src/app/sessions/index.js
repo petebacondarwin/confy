@@ -1,6 +1,5 @@
 import module from './modules';
-import {reducer} from './states';
-import {sessionSelectors} from './selectors';
+import {reducer, sessionSelectors} from './states';
 import {sessionsSagaFactory} from './sagas';
 
 const sagaFactories = [sessionsSagaFactory];

@@ -2,44 +2,49 @@
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
   UNSUBSCRIBE: 'sessions/UNSUBSCRIBE',
-  UPDATE: 'sessions/UPDATE',
-  SAVE: 'sessions/SAVE'
+  UPDATE_FROM_SERVER: 'sessions/UPDATE',
+  EDIT: 'session/EDIT',
+  ADD: 'sessions/ADD',
+  SAVE: 'sessions/SAVE',
+  REMOVE: 'sessions/REMOVE'
 };
 
-// STATUS TYPES
-export const sessionsStatusTypes = {
-  SUBSCRIBED: 'sessions/SUBSCRIBED',
-  UNSUBSCRIBED: 'sessions/UNSUBSCRIBED'
-};
-
-
-// COMMON STATES
-const UNSUBSCRIBED_STATE = {
-  status: sessionsStatusTypes.UNSUBSCRIBED,
-  items: []
-};
-
-const SUBSCRIBED_STATE = {
-  status: sessionsStatusTypes.SUBSCRIBED,
-  items: []
-};
 
 // REDUCERS
-export function reducer(state = UNSUBSCRIBED_STATE, action) {
+export function reducer(state = {}, action) {
+  return {
+    sessions: subscriptionReducer(state.sessions, action),
+    editing: editingReducer(state.editing, action)
+  };
+}
+
+function subscriptionReducer(state, action) {
   switch(action.type) {
     case sessionsActionTypes.SUBSCRIBE:
-      return SUBSCRIBED_STATE;
+      state = [];
+      break;
     case sessionsActionTypes.UNSUBSCRIBE:
-      return UNSUBSCRIBED_STATE;
-    case sessionsActionTypes.UPDATE:
-      return {
-        status: sessionsStatusTypes.SUBSCRIBED,
-        items: action.sessions,
-        subscription: action.subscription
-      };
-    default:
-      return state;
+      state = undefined;
+      break;
+    case sessionsActionTypes.UPDATE_FROM_SERVER:
+      state = action.sessions;
+      break;
   }
+  return state;
+}
+
+function editingReducer(state = {}, action) {
+  switch(action.type) {
+    case sessionsActionTypes.EDIT:
+    case sessionsActionTypes.ADD:
+      state = Object.assign({}, state, { [action.session.id]: action.session });
+      break;
+    case sessionsActionTypes.SAVE:
+      state = Object.assign({}, state);
+      delete state[action.session.id];
+      break;
+  }
+  return state;
 }
 
 // ACTION CREATORS
@@ -51,10 +56,17 @@ export function unsubscribeAction() {
   return { type: sessionsActionTypes.UNSUBSCRIBE };
 }
 
-export function updateAction(snapshot) {
+export function updateFromServerAction(sessions) {
   return {
-    type: sessionsActionTypes.UPDATE,
-    sessions: snapshot.val()
+    type: sessionsActionTypes.UPDATE_FROM_SERVER,
+    sessions
+  };
+}
+
+export function editAction(session) {
+  return {
+    type: sessionsActionTypes.EDIT,
+    session: session
   };
 }
 
@@ -62,5 +74,25 @@ export function saveAction(session) {
   return {
     type: sessionsActionTypes.SAVE,
     session: session
+  };
+}
+
+export function deleteAction(session) {
+  return {
+    type: sessionsActionTypes.REMOVE,
+    session: session
+  };
+}
+
+
+// SELECTORS FACTORY
+export function sessionSelectors(getState) {
+  return {
+    getSessionItems() {
+      return getState().sessions;
+    },
+    isEditing(session) {
+      return !!getState().editing[session.id];
+    }
   };
 }

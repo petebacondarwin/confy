@@ -43,6 +43,18 @@ export function firebaseServiceFactory(firebaseRootUrl, $q) {
     off(node, eventType, channel) {
       // Remove the channel "put" handler from the event
       node.off(eventType, channel.put);
+    },
+
+    save(snaphot, key, value) {
+
+    },
+
+    add(snapshot, value) {
+
+    },
+
+    delete(snapshot) {
+
     }
   };
 }
