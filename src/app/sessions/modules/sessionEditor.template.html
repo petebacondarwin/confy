@@ -1,10 +1,10 @@
-<div ng-if="$ctrl.isEditing">
-  <label name="name">Name: <input ng-model="$ctrl.value.name"></label>
+<form ng-if="$ctrl.isEditing" ng-submit="$ctrl.save()">
+  <label name="name">Name: <input ng-model="$ctrl.value.name" autofocus></label>
   <label name="start">Start: <input type="datetime" ng-model="$ctrl.value.start"></label>
   <label name="end">End: <input type="datetime" ng-model="$ctrl.value.end"></label>
   <button ng-click="$ctrl.save()">Save</button>
   <button ng-click="$ctrl.delete()">Delete</button>
-</div>
+</form>
 <div ng-if="!$ctrl.isEditing">
   {{ $ctrl.value.name }} : {{ $ctrl.value.start }} - {{ $ctrl.value.end }}
   <button ng-click="$ctrl.edit()">Edit</button>
