@@ -10,6 +10,7 @@ import createLogger from 'redux-logger';
 // Import feature areas
 import auth from './auth';
 import sessions from './sessions';
+import notifications from './notifications';
 
 // Import other angular module dependencies
 import confyAppModule from './modules/confyApp.module';
@@ -17,7 +18,8 @@ import confyAppModule from './modules/confyApp.module';
 // Create the object containing redux state stuff
 let states = {
   auth: auth.state,
-  sessions: sessions.state
+  sessions: sessions.state,
+  notifications: notifications.state
 };
 
 // Create an array of middleware to pass to redux

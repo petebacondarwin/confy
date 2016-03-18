@@ -1,6 +1,8 @@
+import {isCancelError} from 'redux-saga';
 import {take, call, put, race, fork, cancel} from 'redux-saga/effects';
 import {createChannel} from 'confy/lib/channel';
 import {sessionsActionTypes, updateFromServerAction, editAction} from './states';
+import {errorAction} from 'confy/app/notifications/states';
 
 export function sessionsSagaFactory(firebaseService, $q) {
 
@@ -65,7 +67,13 @@ export function sessionsSagaFactory(firebaseService, $q) {
     while(true) {
       const {session} = yield take(sessionsActionTypes.SAVE);
       const ref = yield call([firebaseRef, firebaseRef.child], session.key);
-      yield call([ref, ref.set], session.value);
+      try {
+        yield call([ref, ref.set], session.value);
+      } catch(e) {
+        if (!isCancelError(e)) {
+          yield put(errorAction(e));
+        }
+      }
     }
   }
 
@@ -73,7 +81,6 @@ export function sessionsSagaFactory(firebaseService, $q) {
     while(true) {
       const {session} = yield take(sessionsActionTypes.REMOVE);
       const ref = yield call([firebaseRef, firebaseRef.child], session.key);
-      console.log(ref.toString());
       yield call([ref, ref.remove]);
     }
   }

@@ -5,6 +5,7 @@ export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
   UNSUBSCRIBE: 'sessions/UNSUBSCRIBE',
   UPDATE_FROM_SERVER: 'sessions/UPDATE',
+  UPDATE_FROM_SERVER_ERROR: 'sessions/UPDATE_ERROR',
   EDIT: 'session/EDIT',
   ADD: 'sessions/ADD',
   SAVE: 'sessions/SAVE',
@@ -67,6 +68,7 @@ function editingReducer(state = {}, action) {
 export const subscribeAction = () => ({type: sessionsActionTypes.SUBSCRIBE});
 export const unsubscribeAction = () => ({type: sessionsActionTypes.UNSUBSCRIBE});
 export const updateFromServerAction = (snapshot) => ({type: sessionsActionTypes.UPDATE_FROM_SERVER, snapshot});
+export const updateErrorAction = (error) => ({type: sessionsActionTypes.UPDATE_FROM_SERVER_ERROR, error});
 export const addAction = createSessionAction(sessionsActionTypes.ADD);
 export const editAction = createSessionAction(sessionsActionTypes.EDIT);
 export const saveAction = createSessionAction(sessionsActionTypes.SAVE);
