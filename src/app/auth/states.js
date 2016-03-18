@@ -65,3 +65,16 @@ export function loginSuccessAction(authData) {
 export function loginFailedAction(error) {
   return {type: authActionTypes.LOGIN_FAILED, error};
 }
+
+
+// SELECTOR FACTORY
+export function authSelectors(getState) {
+  return {
+    getUserInfo() {
+      return getState().userInfo;
+    },
+    isLoggedIn() {
+      return !!this.getUserInfo();
+    }
+  };
+}

@@ -1,36 +1,31 @@
 import angular from 'angular';
-import {BindingCloner} from 'confy/lib/bindingCloner';
 
+class SessionEditor {
 
-class SessionEditor extends BindingCloner {
   constructor($scope) {
-    super($scope, ['session']);
-  }
-
-  $onInit() {
-    // console.log('onInit', this);
+    $scope.$watch(
+      () => this.session,
+      (session) => Object.assign(this, angular.copy(session))
+    );
   }
 
   edit() {
-    console.log('edit (inner)', this.session);
-    this.onEdit({ session: this.session });
+    this.onEdit();
   }
 
   save() {
-    console.log('save (inner)', this.session);
-    this.onSave({ session: this.session });
+    this.onSave({key: this.key, value: this.value});
   }
 
   delete() {
-    console.log('delete (inner)', this.session);
-    this.onDelete({ session: this.session });
+    this.onDelete();
   }
 }
 
 export default angular.module('sessions/sessionEditor', [])
   .component('sessionEditor', {
     bindings: {
-      _session: '<session',
+      session: '<',
       isEditing: '<',
       onSave: '&',
       onDelete: '&',

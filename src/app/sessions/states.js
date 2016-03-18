@@ -1,3 +1,5 @@
+import deepFreeze from 'deep-freeze';
+
 // ACTION TYPES
 export const sessionsActionTypes = {
   SUBSCRIBE: 'sessions/SUBSCRIBE',
@@ -10,15 +12,30 @@ export const sessionsActionTypes = {
 };
 
 
+// STATE SHAPE
+// {
+//   sessions: [
+//     {key: sessionKey1, value: sessionValue1},
+//     {key: sessionKey2, value: sessionValue2},
+//     ...
+//   ],
+//   editing: {
+//     sessionKey1: true,
+//     sessionKey2: false,
+//     ...
+//   }
+// }
+
+
 // REDUCERS
 export function reducer(state = {}, action) {
-  return {
-    sessions: subscriptionReducer(state.sessions, action),
+  return deepFreeze({
+    sessions: sessionsReducer(state.sessions, action),
     editing: editingReducer(state.editing, action)
-  };
+  });
 }
 
-function subscriptionReducer(state, action) {
+function sessionsReducer(state, action) {
   switch(action.type) {
     case sessionsActionTypes.SUBSCRIBE:
       state = [];
@@ -27,7 +44,8 @@ function subscriptionReducer(state, action) {
       state = undefined;
       break;
     case sessionsActionTypes.UPDATE_FROM_SERVER:
-      state = action.sessions;
+      state = [];
+      action.snapshot.forEach((session) => { state.push({ key: session.key(), value: session.val()}); });
       break;
   }
   return state;
@@ -36,63 +54,34 @@ function subscriptionReducer(state, action) {
 function editingReducer(state = {}, action) {
   switch(action.type) {
     case sessionsActionTypes.EDIT:
-    case sessionsActionTypes.ADD:
-      state = Object.assign({}, state, { [action.session.id]: action.session });
+      state = Object.assign({}, state, {[action.session.key]: true});
       break;
     case sessionsActionTypes.SAVE:
-      state = Object.assign({}, state);
-      delete state[action.session.id];
+      state = Object.assign({}, state, {[action.session.key]: false});
       break;
   }
   return state;
 }
 
 // ACTION CREATORS
-export function subscribeAction() {
-  return { type: sessionsActionTypes.SUBSCRIBE };
-}
+export const subscribeAction = () => ({type: sessionsActionTypes.SUBSCRIBE});
+export const unsubscribeAction = () => ({type: sessionsActionTypes.UNSUBSCRIBE});
+export const updateFromServerAction = (snapshot) => ({type: sessionsActionTypes.UPDATE_FROM_SERVER, snapshot});
+export const addAction = createSessionAction(sessionsActionTypes.ADD);
+export const editAction = createSessionAction(sessionsActionTypes.EDIT);
+export const saveAction = createSessionAction(sessionsActionTypes.SAVE);
+export const removeAction = createSessionAction(sessionsActionTypes.REMOVE);
 
-export function unsubscribeAction() {
-  return { type: sessionsActionTypes.UNSUBSCRIBE };
-}
-
-export function updateFromServerAction(sessions) {
-  return {
-    type: sessionsActionTypes.UPDATE_FROM_SERVER,
-    sessions
-  };
-}
-
-export function editAction(session) {
-  return {
-    type: sessionsActionTypes.EDIT,
-    session: session
-  };
-}
-
-export function saveAction(session) {
-  return {
-    type: sessionsActionTypes.SAVE,
-    session: session
-  };
-}
-
-export function deleteAction(session) {
-  return {
-    type: sessionsActionTypes.REMOVE,
-    session: session
-  };
-}
+function createSessionAction(type) { return (session) => ({type, session}); }
 
 
 // SELECTORS FACTORY
 export function sessionSelectors(getState) {
+  const getSessions = () => getState().sessions;
+  const isEditing = (session) => getState().editing[session.key];
+
   return {
-    getSessionItems() {
-      return getState().sessions;
-    },
-    isEditing(session) {
-      return !!getState().editing[session.id];
-    }
+    getSessions,
+    isEditing
   };
 }

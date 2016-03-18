@@ -29,32 +29,6 @@ export function firebaseServiceFactory(firebaseRootUrl, $q) {
 
     getNode(nodePath) {
       return firebaseRef.child(nodePath);
-    },
-
-    on(node, eventType) {
-      // We use a "channel" to convert Firebase's "push" approach to
-      // redux-saga's "pull" approach
-      const channel = createChannel($q);
-      // Every time an event arrives we "put" it on the channel
-      node.on(eventType, channel.put);
-      return channel;
-    },
-
-    off(node, eventType, channel) {
-      // Remove the channel "put" handler from the event
-      node.off(eventType, channel.put);
-    },
-
-    save(snaphot, key, value) {
-
-    },
-
-    add(snapshot, value) {
-
-    },
-
-    delete(snapshot) {
-
     }
   };
 }

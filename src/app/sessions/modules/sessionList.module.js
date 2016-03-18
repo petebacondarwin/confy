@@ -1,5 +1,5 @@
 import angular from 'angular';
-import {subscribeAction, unsubscribeAction, saveAction, editAction} from '../states';
+import {subscribeAction, unsubscribeAction, addAction, saveAction, editAction, removeAction} from '../states';
 
 class SessionListContainer {
   constructor(sessionsSelectors, $scope, store) {
@@ -10,30 +10,31 @@ class SessionListContainer {
 
   $onInit() {
     this.dispatch(subscribeAction());
-    this.$scope.$on('$destroy', () => this.dispatch(unsubscribeAction));
+    this.$scope.$on('$destroy', () => this.dispatch(unsubscribeAction()));
   }
 
   getSessions() {
-    return this.sessionsSelectors.getSessionItems();
+    return this.sessionsSelectors.getSessions();
   }
 
   isEditing(session) {
     return this.sessionsSelectors.isEditing(session);
   }
 
+  add() {
+    this.dispatch(addAction());
+  }
+
   edit(session) {
-    console.log('edit', session);
     this.dispatch(editAction(session));
   }
 
-  save(session) {
-    console.log('save', session);
-    this.dispatch(saveAction(session));
+  save(session, data) {
+    this.dispatch(saveAction(session, data));
   }
 
-  delete(session) {
-    console.log('delete', session);
-    this.dispatch(deleteAction(session));
+  remove(session) {
+    this.dispatch(removeAction(session));
   }
 }
 
