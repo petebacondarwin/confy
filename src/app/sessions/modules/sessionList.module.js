@@ -2,8 +2,9 @@ import angular from 'angular';
 import {subscribeAction, unsubscribeAction, addAction, saveAction, editAction, removeAction} from '../states';
 
 class SessionListContainer {
-  constructor(sessionsSelectors, $scope, store) {
+  constructor(sessionsSelectors, authSelectors, $scope, store) {
     this.sessionsSelectors = sessionsSelectors;
+    this.authSelectors = authSelectors;
     this.$scope = $scope;
     this.dispatch = store.dispatch;
   }
@@ -11,6 +12,10 @@ class SessionListContainer {
   $onInit() {
     this.dispatch(subscribeAction());
     this.$scope.$on('$destroy', () => this.dispatch(unsubscribeAction()));
+  }
+
+  isLoggedIn() {
+    return this.authSelectors.isLoggedIn();
   }
 
   getSessions() {

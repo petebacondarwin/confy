@@ -1,9 +1,11 @@
-<div ng-repeat="session in $ctrl.getSessions() track by $index">
-<session-editor
-    session="session"
-    is-editing="$ctrl.isEditing(session)"
-    on-edit="$ctrl.edit(session)"
-    on-save="$ctrl.save({key: key, value: value})"
-    on-delete="$ctrl.remove(session)"></session-editor>
+<div ng-if="$ctrl.isLoggedIn()">
+  <div ng-repeat="session in $ctrl.getSessions() track by $index">
+  <session-editor
+      session="session"
+      is-editing="$ctrl.isEditing(session)"
+      on-edit="$ctrl.edit(session)"
+      on-save="$ctrl.save({key: key, value: value})"
+      on-delete="$ctrl.remove(session)"></session-editor>
+  </div>
+  <button ng-click="$ctrl.add()">Add</button>
 </div>
-<button ng-click="$ctrl.add()">Add</button>
