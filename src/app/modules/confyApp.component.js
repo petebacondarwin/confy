@@ -1,6 +1,14 @@
 import angular from 'angular';
 
-class ConfyApp {}
+class ConfyApp {
+  constructor(authSelectors) {
+    this.authSelectors = authSelectors;
+  }
+
+  isLoggedIn() {
+    return this.authSelectors.isLoggedIn();
+  }
+}
 
 export default angular.module('confyApp', [])
   .component('confyApp', {

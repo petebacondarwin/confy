@@ -1,6 +1,7 @@
 import {isCancelError} from 'redux-saga';
-import {take, call, put, race, fork, cancel} from 'redux-saga/effects';
+import {take, call, put, cancel} from 'redux-saga/effects';
 import {createChannel} from 'confy/lib/channel';
+import {forkAndLoop} from 'confy/lib/forkAndLoop';
 import {sessionsActionTypes, updateFromServerAction, editAction} from './states';
 import {errorAction} from 'confy/app/notifications/states';
 
@@ -16,72 +17,82 @@ export function sessionsSagaFactory(firebaseService, $q) {
       // Wait for a SUBSCRIBE action
       yield take(sessionsActionTypes.SUBSCRIBE);
 
-      // Kick off the tasks that will deal with saving and removing sessions
-      const addTask = yield fork(sessionAddSaga);
-      const saveTask = yield fork(sessionSaveSaga);
-      const removeTask = yield fork(sessionRemoveSaga);
-
       // Connect the "value" event on the Firebase ref to a "channel" from which we can "pull" updates
       let channel = yield call(createFirebaseChannel, firebaseRef, 'value');
 
-      // Monitor the "sessions" updates until we get an UNSUBSCRIBE action
-      race({
-        updates: yield takeUpdateFromFirebase(channel),
-        unsubscribe: yield take(sessionsActionTypes.UNSUBSCRIBE)
-      });
+      // Kick off the tasks that will deal with saving and removing sessions
+      const addTask = yield forkAndLoop(sessionAddSaga);
+      const saveTask = yield forkAndLoop(sessionSaveSaga);
+      const removeTask = yield forkAndLoop(sessionRemoveSaga);
+      const updateTask = yield forkAndLoop(takeUpdateFromFirebase, channel);
+
+      // Wait for an unsubscribe action
+      yield take(sessionsActionTypes.UNSUBSCRIBE);
 
       // Disconnect and destroy the channel
-      yield call(disconnectChannel, 'value', channel);
+      yield call(disconnectChannel, firebaseRef, 'value', channel);
       channel = null;
 
       // Cancel the forked subtasks
       yield cancel(addTask);
       yield cancel(saveTask);
       yield cancel(removeTask);
+      yield cancel(updateTask);
     }
   }
 
 
   function* takeUpdateFromFirebase(channel) {
-    while(true) { /*eslint no-constant-condition: 0*/
+    try {
       // Wait for an update to arrive on the channel
       const currentSnapshot = yield call([channel, channel.take]);
       // Dispatch the new sessions list to the store
       yield put(updateFromServerAction(currentSnapshot));
+    } catch(e) {
+      if (!isCancelError(e)) {
+        yield put(errorAction(e));
+      }
     }
   }
 
   function* sessionAddSaga() {
-    while(true) {
+    try {
       // Wait for an add session action
       yield take(sessionsActionTypes.ADD);
       // Create the new session and save it
       const ref = yield call([firebaseRef, firebaseRef.push], {});
-      yield call([ref, ref.set], { name: '' });
+      yield call([ref, ref.set], { _isNew: true });
       // Set the action into an editing state
       yield put(editAction({key: ref.key()}));
+    } catch(e) {
+      if (!isCancelError(e)) {
+        yield put(errorAction(e));
+      }
     }
   }
 
   function* sessionSaveSaga() {
-    while(true) {
-      const {session} = yield take(sessionsActionTypes.SAVE);
-      const ref = yield call([firebaseRef, firebaseRef.child], session.key);
-      try {
-        yield call([ref, ref.set], session.value);
-      } catch(e) {
-        if (!isCancelError(e)) {
-          yield put(errorAction(e));
-        }
+    const {session} = yield take(sessionsActionTypes.SAVE);
+    const ref = yield call([firebaseRef, firebaseRef.child], session.key);
+    delete session.value._isNew;
+    try {
+      yield call([ref, ref.set], session.value);
+    } catch(e) {
+      if (!isCancelError(e)) {
+        yield put(errorAction(e));
       }
     }
   }
 
   function* sessionRemoveSaga() {
-    while(true) {
+    try {
       const {session} = yield take(sessionsActionTypes.REMOVE);
       const ref = yield call([firebaseRef, firebaseRef.child], session.key);
       yield call([ref, ref.remove]);
+    } catch(e) {
+      if (!isCancelError(e)) {
+        yield put(errorAction(e));
+      }
     }
   }
 
@@ -96,7 +107,6 @@ export function sessionsSagaFactory(firebaseService, $q) {
   }
 
   function disconnectChannel(node, eventType, channel) {
-    console.log('disconnectChannel');
     node.off(eventType, channel.put);
   }
 }

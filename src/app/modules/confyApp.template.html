@@ -1,2 +1,5 @@
- <confy-login-container></confy-login-container>
- <ng-outlet></ng-outlet>
+<confy-login-container></confy-login-container>
+<div ng-if="$ctrl.isLoggedIn()">
+  <session-list-container></session-list-container>
+  <!--<ng-outlet></ng-outlet>-->
+</div>

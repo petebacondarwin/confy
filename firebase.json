@@ -5,5 +5,14 @@
     "firebase.json",
     "**/.*",
     "**/node_modules/**"
-  ]
+  ],
+  "rules": {
+      ".read": true,
+      "sessions": {
+        ".write": "auth !== null",
+        "$session_id": {
+          ".validate": "newData.child('_isNew').val() == true || newData.child('name').val().length > 0"
+        }
+      }
+  }
 }
