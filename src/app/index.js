@@ -1,5 +1,6 @@
 import 'babel-polyfill';
 import angular from 'angular';
+import '@angular/router/angular1/angular_1_router';
 import createStateServices from 'confy/lib/createStateServices';
 import {firebaseServiceFactory} from 'confy/lib/firebase';
 
@@ -13,7 +14,7 @@ import sessions from './sessions';
 import notifications from './notifications';
 
 // Import other angular module dependencies
-import confyAppModule from './modules/confyApp.module';
+import confyApp from './modules/confyApp.component';
 
 // Create the object containing redux state stuff
 let states = {
@@ -29,8 +30,9 @@ let middleware = [
 ];
 
 // Create the top level Angular app module
-angular.module('app', [confyAppModule, auth.module, sessions.module])
+angular.module('app', ['ngComponentRouter', confyApp, auth.module, sessions.module])
   .constant('firebaseRootUrl', 'https://confy.firebaseio.com')
+  .value('$routerRootComponent', 'confyApp')
   .factory('firebaseService', firebaseServiceFactory)
   .config(($provide)=> createStateServices($provide, states, middleware));
 
